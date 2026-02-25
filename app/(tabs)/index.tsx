@@ -1,11 +1,13 @@
+// Testing CodeRabbit review
+
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { TimerDisplay } from "@/components/TimerDisplay";
 import { theme } from "@/constants/theme";
 import {
-    AppData,
-    loadData,
-    saveData,
-    updateDataOnSessionComplete,
+  AppData,
+  loadData,
+  saveData,
+  updateDataOnSessionComplete,
 } from "@/utils/storage";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
