@@ -1,5 +1,3 @@
-// Testing CodeRabbit review
-
 import { PrimaryButton } from "@/components/PrimaryButton";
 import { TimerDisplay } from "@/components/TimerDisplay";
 import { theme } from "@/constants/theme";
