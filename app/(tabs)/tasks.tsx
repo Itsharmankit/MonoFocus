@@ -96,7 +96,6 @@ export default function TasksScreen() {
     };
 
     setData(updatedData);
-    void saveData(updatedData);
     setInputText("");
     setDueDateInput("");
   }, [data, inputText, dueDateInput, isValidDateString]);
@@ -113,7 +112,6 @@ export default function TasksScreen() {
       };
 
       setData(updatedData);
-      void saveData(updatedData);
     },
     [data],
   );
@@ -128,7 +126,6 @@ export default function TasksScreen() {
       };
 
       setData(updatedData);
-      void saveData(updatedData);
       if (editingId === taskId) {
         setEditingId(null);
         setEditingText("");
@@ -167,7 +164,6 @@ export default function TasksScreen() {
     };
 
     setData(updatedData);
-    void saveData(updatedData);
 
     setEditingId(null);
     setEditingText("");
@@ -182,7 +178,6 @@ export default function TasksScreen() {
     };
 
     setData(updatedData);
-    void saveData(updatedData);
     setEditingId(null);
     setEditingText("");
   }, [data]);
