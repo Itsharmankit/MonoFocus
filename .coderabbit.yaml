@@ -1,0 +1,87 @@
+# CodeRabbit Configuration for MonoFocus
+# Visit https://coderabbit.ai for more information
+
+language: "en-US"
+
+# Review settings
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  path_instructions:
+    - path: "app/**/*.tsx"
+      instructions: |
+        Review React Native screen components focusing on:
+        - Performance optimizations (useMemo, useCallback usage)
+        - Proper cleanup in useEffect hooks
+        - Accessibility best practices
+        - Safe navigation patterns
+    - path: "components/**/*.tsx"
+      instructions: |
+        Review reusable components for:
+        - Type safety and prop validation
+        - Reusability and composition
+        - Animation performance
+        - Style consistency with theme
+    - path: "utils/**/*.ts"
+      instructions: |
+        Review utility functions for:
+        - Error handling and edge cases
+        - AsyncStorage error handling
+        - Date manipulation correctness
+        - Data validation
+    - path: "constants/**/*.ts"
+      instructions: |
+        Ensure theme values are:
+        - Properly typed
+        - Consistently used across the app
+        - Following design system principles
+
+# Code quality checks
+checks:
+  timeout_minutes: 5
+  enable_free_tier: true
+
+# Auto-review settings
+auto_review:
+  enabled: true
+  drafts: false
+  base_branches:
+    - main
+    - master
+    - develop
+
+# Chat settings
+chat:
+  auto_reply: true
+
+# Tone of reviews
+tone_instructions: |
+  - Be constructive and supportive
+  - Focus on React Native and Expo best practices
+  - Highlight TypeScript type safety improvements
+  - Suggest performance optimizations where relevant
+  - Consider mobile-specific concerns (battery, memory, bundle size)
+  - Validate AsyncStorage usage patterns
+  - Check for proper React hooks usage and dependencies
+
+# Files to ignore
+ignore:
+  - "**/*.md"
+  - "**/node_modules/**"
+  - "**/.expo/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/*.lock"
+  - "package-lock.json"
+  - "yarn.lock"
+  - "**/.git/**"
+  - "**/assets/**"
+  - "**/__tests__/**"
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "**/*.spec.tsx"
