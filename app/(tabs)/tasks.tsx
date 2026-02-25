@@ -1,32 +1,27 @@
-import React, { useState, useCallback } from 'react';
+import { TaskItem } from "@/components/TaskItem";
+import { theme } from "@/constants/theme";
+import { AppData, loadData, saveData, Task } from "@/utils/storage";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useCallback, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { theme } from '@/constants/theme';
-import { TaskItem } from '@/components/TaskItem';
-import {
-  loadData,
-  saveData,
-  AppData,
-  Task,
-} from '@/utils/storage';
+    FlatList,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 
 export default function TasksScreen() {
   const [data, setData] = useState<AppData>({
     sessionsCompleted: 0,
     completedToday: 0,
     currentStreak: 0,
-    lastCompletedDate: '',
+    lastCompletedDate: "",
     tasks: [],
   });
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
 
   useFocusEffect(
     useCallback(() => {
@@ -35,12 +30,12 @@ export default function TasksScreen() {
         setData(loadedData);
       };
       loadAppData();
-    }, [])
+    }, []),
   );
 
   const handleAddTask = useCallback(async () => {
     const trimmed = inputText.trim();
-    if (trimmed === '') {
+    if (trimmed === "") {
       return;
     }
 
@@ -51,47 +46,46 @@ export default function TasksScreen() {
       sessionsSpent: 0,
     };
 
-    const updatedData = {
-      ...data,
-      tasks: [...data.tasks, newTask],
-    };
+    setData((prev) => {
+      const updatedData = {
+        ...prev,
+        tasks: [...prev.tasks, newTask],
+      };
+      void saveData(updatedData);
+      return updatedData;
+    });
+    setInputText("");
+  }, [inputText]);
 
-    setData(updatedData);
-    await saveData(updatedData);
-    setInputText('');
-  }, [inputText, data]);
-
-  const handleToggleTask = useCallback(
-    async (taskId: string) => {
-      const updatedTasks = data.tasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
+  const handleToggleTask = useCallback((taskId: string) => {
+    setData((prev) => {
+      const updatedTasks = prev.tasks.map((task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task,
       );
 
       const updatedData = {
-        ...data,
+        ...prev,
         tasks: updatedTasks,
       };
 
-      setData(updatedData);
-      await saveData(updatedData);
-    },
-    [data]
-  );
+      void saveData(updatedData);
+      return updatedData;
+    });
+  }, []);
 
-  const handleDeleteTask = useCallback(
-    async (taskId: string) => {
-      const updatedTasks = data.tasks.filter((task) => task.id !== taskId);
+  const handleDeleteTask = useCallback((taskId: string) => {
+    setData((prev) => {
+      const updatedTasks = prev.tasks.filter((task) => task.id !== taskId);
 
       const updatedData = {
-        ...data,
+        ...prev,
         tasks: updatedTasks,
       };
 
-      setData(updatedData);
-      await saveData(updatedData);
-    },
-    [data]
-  );
+      void saveData(updatedData);
+      return updatedData;
+    });
+  }, []);
 
   const renderTask = ({ item }: { item: Task }) => (
     <TaskItem
@@ -136,6 +130,7 @@ export default function TasksScreen() {
         keyExtractor={(item) => item.id}
         ListEmptyComponent={renderEmpty}
         contentContainerStyle={styles.listContainer}
+        keyboardShouldPersistTaps="handled"
       />
     </SafeAreaView>
   );
@@ -149,13 +144,13 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: theme.typography.headerSize,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: theme.colors.textPrimary,
     marginTop: theme.spacing.lg,
     marginBottom: theme.spacing.md,
   },
   inputContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: theme.spacing.md,
     gap: theme.spacing.sm,
   },
@@ -172,24 +167,24 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     borderRadius: theme.borderRadius.default,
     paddingHorizontal: theme.spacing.md,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   addButtonText: {
     color: theme.colors.textPrimary,
     fontSize: theme.typography.bodySize,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   listContainer: {
     paddingBottom: theme.spacing.lg,
   },
   emptyContainer: {
     marginTop: theme.spacing.xl,
-    alignItems: 'center',
+    alignItems: "center",
   },
   emptyText: {
     fontSize: theme.typography.bodySize,
     color: theme.colors.textMuted,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
