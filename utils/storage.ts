@@ -8,6 +8,7 @@ export interface Task {
   completed: boolean;
   sessionsSpent: number;
   dueDate?: string;
+  notes?: string;
 }
 
 export interface AppData {
@@ -32,6 +33,7 @@ const normalizeData = (data: AppData): AppData => {
     completed: Boolean(task.completed),
     sessionsSpent: task.sessionsSpent ?? 0,
     dueDate: task.dueDate ?? "",
+    notes: task.notes ?? "",
   }));
 
   return {

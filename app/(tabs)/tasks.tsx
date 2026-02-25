@@ -32,6 +32,8 @@ export default function TasksScreen() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
   const [sortByCompleted, setSortByCompleted] = useState(true);
+  const [showingNotesId, setShowingNotesId] = useState<string | null>(null);
+  const [notesText, setNotesText] = useState("");
   const isInitialLoad = useRef(true);
 
   useFocusEffect(
@@ -191,6 +193,43 @@ export default function TasksScreen() {
     setSortByCompleted((prev) => !prev);
   }, []);
 
+  const handleToggleNotes = useCallback(
+    (taskId: string, currentNotes: string) => {
+      if (showingNotesId === taskId) {
+        setShowingNotesId(null);
+        setNotesText("");
+      } else {
+        setShowingNotesId(taskId);
+        setNotesText(currentNotes || "");
+      }
+    },
+    [showingNotesId],
+  );
+
+  const handleChangeNotesText = useCallback((value: string) => {
+    setNotesText(value);
+  }, []);
+
+  const handleSaveNotes = useCallback(() => {
+    if (!showingNotesId) {
+      return;
+    }
+
+    const updatedTasks = data.tasks.map((task) =>
+      task.id === showingNotesId ? { ...task, notes: notesText || "" } : task,
+    );
+
+    const updatedData = {
+      ...data,
+      tasks: updatedTasks,
+    };
+
+    setData(updatedData);
+    void saveData(updatedData);
+    setShowingNotesId(null);
+    setNotesText("");
+  }, [data, showingNotesId, notesText]);
+
   const { totalCount, completedCount, activeCount } = useMemo(() => {
     const total = data.tasks.length;
     const completed = data.tasks.filter((task) => task.completed).length;
@@ -222,6 +261,11 @@ export default function TasksScreen() {
       onStartEdit={() => handleStartEdit(item)}
       onSaveEdit={handleSaveEdit}
       onCancelEdit={handleCancelEdit}
+      isShowingNotes={showingNotesId === item.id}
+      onToggleNotes={() => handleToggleNotes(item.id, item.notes || "")}
+      notesText={showingNotesId === item.id ? notesText : ""}
+      onChangeNotesText={handleChangeNotesText}
+      onSaveNotes={handleSaveNotes}
     />
   );
 
