@@ -7,6 +7,7 @@ export interface Task {
   title: string;
   completed: boolean;
   sessionsSpent: number;
+  dueDate?: string;
 }
 
 export interface AppData {
@@ -24,6 +25,20 @@ const getDefaultData = (): AppData => ({
   lastCompletedDate: "",
   tasks: [],
 });
+
+const normalizeData = (data: AppData): AppData => {
+  const normalizedTasks = data.tasks.map((task) => ({
+    ...task,
+    completed: Boolean(task.completed),
+    sessionsSpent: task.sessionsSpent ?? 0,
+    dueDate: task.dueDate ?? "",
+  }));
+
+  return {
+    ...data,
+    tasks: normalizedTasks,
+  };
+};
 
 const getToday = (): string => {
   return new Date().toISOString().split("T")[0];
@@ -87,7 +102,7 @@ export const loadData = async (): Promise<AppData> => {
     if (jsonValue === null) {
       return getDefaultData();
     }
-    const data = JSON.parse(jsonValue) as AppData;
+    const data = normalizeData(JSON.parse(jsonValue) as AppData);
     return checkAndUpdateStreak(data);
   } catch (error) {
     console.error("Error loading data:", error);

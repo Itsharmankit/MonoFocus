@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { theme } from "../constants/theme";
 import { Task } from "../utils/storage";
 
@@ -7,12 +13,24 @@ interface TaskItemProps {
   task: Task;
   onToggle: () => void;
   onDelete: () => void;
+  isEditing: boolean;
+  editText: string;
+  onChangeEditText: (value: string) => void;
+  onStartEdit: () => void;
+  onSaveEdit: () => void;
+  onCancelEdit: () => void;
 }
 
 export const TaskItem: React.FC<TaskItemProps> = ({
   task,
   onToggle,
   onDelete,
+  isEditing,
+  editText,
+  onChangeEditText,
+  onStartEdit,
+  onSaveEdit,
+  onCancelEdit,
 }) => {
   return (
     <View style={styles.container}>
@@ -27,16 +45,64 @@ export const TaskItem: React.FC<TaskItemProps> = ({
           {task.completed && <Text style={styles.checkmark}>✓</Text>}
         </View>
       </TouchableOpacity>
-      <Text style={[styles.title, task.completed && styles.titleCompleted]}>
-        {task.title}
-      </Text>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={onDelete}
-        activeOpacity={0.7}
-      >
-        <Text style={styles.deleteIcon}>🗑</Text>
-      </TouchableOpacity>
+      <View style={styles.content}>
+        {isEditing ? (
+          <TextInput
+            style={styles.editInput}
+            value={editText}
+            onChangeText={onChangeEditText}
+            placeholder="Edit task title"
+            placeholderTextColor={theme.colors.textMuted}
+            autoFocus
+            returnKeyType="done"
+            onSubmitEditing={onSaveEdit}
+          />
+        ) : (
+          <Text style={[styles.title, task.completed && styles.titleCompleted]}>
+            {task.title}
+          </Text>
+        )}
+        {task.dueDate ? (
+          <Text style={styles.dueDateText}>Due: {task.dueDate}</Text>
+        ) : null}
+      </View>
+      <View style={styles.actions}>
+        {isEditing ? (
+          <>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={onSaveEdit}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.actionIcon}>✅</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={onCancelEdit}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.actionIcon}>✕</Text>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={onStartEdit}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.actionIcon}>✎</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={onDelete}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.actionIcon}>🗑</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
     </View>
   );
 };
@@ -52,6 +118,9 @@ const styles = StyleSheet.create({
   },
   checkboxContainer: {
     marginRight: theme.spacing.sm,
+  },
+  content: {
+    flex: 1,
   },
   checkbox: {
     width: 24,
@@ -72,7 +141,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   title: {
-    flex: 1,
     fontSize: theme.typography.bodySize,
     color: theme.colors.textPrimary,
   },
@@ -80,10 +148,28 @@ const styles = StyleSheet.create({
     textDecorationLine: "line-through",
     color: theme.colors.textMuted,
   },
-  deleteButton: {
+  editInput: {
+    fontSize: theme.typography.bodySize,
+    color: theme.colors.textPrimary,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.textMuted,
+    paddingVertical: theme.spacing.xs,
+  },
+  dueDateText: {
+    fontSize: theme.typography.captionSize,
+    color: theme.colors.textMuted,
+    marginTop: theme.spacing.xs,
+  },
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: theme.spacing.sm,
+  },
+  actionButton: {
     padding: theme.spacing.xs,
   },
-  deleteIcon: {
-    fontSize: 20,
+  actionIcon: {
+    fontSize: 18,
+    color: theme.colors.textPrimary,
   },
 });
