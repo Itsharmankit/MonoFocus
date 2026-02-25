@@ -14,74 +14,20 @@ reviews:
   path_instructions:
     - path: "app/**/*.tsx"
       instructions: |
-        Review React Native screen components focusing on:
-        - Performance optimizations (useMemo, useCallback usage)
-        - Proper cleanup in useEffect hooks
-        - Accessibility best practices
-        - Safe navigation patterns
+        Review React Native screens: check useMemo/useCallback usage, useEffect cleanup, accessibility, and navigation patterns.
     - path: "components/**/*.tsx"
       instructions: |
-        Review reusable components for:
-        - Type safety and prop validation
-        - Reusability and composition
-        - Animation performance
-        - Style consistency with theme
+        Review components: validate TypeScript types, check reusability, animation performance, and theme consistency.
     - path: "utils/**/*.ts"
       instructions: |
-        Review utility functions for:
-        - Error handling and edge cases
-        - AsyncStorage error handling
-        - Date manipulation correctness
-        - Data validation
+        Review utilities: validate error handling, AsyncStorage patterns, date logic, and input validation.
     - path: "constants/**/*.ts"
       instructions: |
-        Ensure theme values are:
-        - Properly typed
-        - Consistently used across the app
-        - Following design system principles
-
-# Code quality checks
-checks:
-  timeout_minutes: 5
-  enable_free_tier: true
-
-# Auto-review settings
-auto_review:
-  enabled: true
-  drafts: false
-  base_branches:
-    - main
-    - master
-    - develop
+        Review theme: ensure proper TypeScript typing, consistent usage, and design system compliance.
 
 # Chat settings
 chat:
   auto_reply: true
 
 # Tone of reviews
-tone_instructions: |
-  - Be constructive and supportive
-  - Focus on React Native and Expo best practices
-  - Highlight TypeScript type safety improvements
-  - Suggest performance optimizations where relevant
-  - Consider mobile-specific concerns (battery, memory, bundle size)
-  - Validate AsyncStorage usage patterns
-  - Check for proper React hooks usage and dependencies
-
-# Files to ignore
-ignore:
-  - "**/*.md"
-  - "**/node_modules/**"
-  - "**/.expo/**"
-  - "**/dist/**"
-  - "**/build/**"
-  - "**/*.lock"
-  - "package-lock.json"
-  - "yarn.lock"
-  - "**/.git/**"
-  - "**/assets/**"
-  - "**/__tests__/**"
-  - "**/*.test.ts"
-  - "**/*.test.tsx"
-  - "**/*.spec.ts"
-  - "**/*.spec.tsx"
+tone_instructions: "Focus on React Native/Expo best practices, TypeScript safety, performance, mobile concerns (battery, memory), AsyncStorage patterns, and proper React hooks usage."
